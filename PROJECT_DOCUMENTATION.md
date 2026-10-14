@@ -1,12 +1,12 @@
-# FolioLab Project Documentation
+# Folioform Project Documentation
 
 ## Project Title
 
-FolioLab: Online Portfolio Generator
+Folioform: Online Portfolio Generator
 
 ## Project Description
 
-FolioLab is a web application that lets users register, create, edit, and share personal portfolios. Users add contact information, a profile photo, biography, education, skills, projects, work experience, and social or website links. They select one of three designs (Simple, Modern, or Creative), preview the portfolio, and share its public link. Owners can manage their portfolios from a private dashboard.
+Folioform is a web application that lets users register, create, edit, and share personal portfolios. Users add contact information, a profile photo, biography, education, skills, projects, work experience, and social or website links. They select one of three designs (Simple, Modern, or Creative), preview the portfolio, and share its public link. Owners can manage their portfolios from a private dashboard.
 
 ## Technologies Used
 
@@ -61,6 +61,4 @@ Insert one generated-portfolio screenshot for each design:
 
 ## Published Website URL
 
-[https://foliolab.up.railway.app/](https://foliolab.up.railway.app/)
-
-Public portfolios use the `/p/{slug}` path. Portfolio editing and deletion require the authenticated owner.
+https://folioform.up.railway.app/
