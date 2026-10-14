@@ -18,6 +18,8 @@ php artisan serve
 
 Open `http://127.0.0.1:8000`. Run the automated checks with `php artisan test`.
 
+See [PROJECT_DOCUMENTATION.md](PROJECT_DOCUMENTATION.md) for the project overview, technologies, database structure, templates, deployment details, and screenshot checklist.
+
 ## Railway deployment
 
 The repository includes a Dockerfile with the PostgreSQL PHP driver and Railway configuration. Create a Railway project, add a PostgreSQL service, and deploy this repository as a web service. Set these web-service variables:
