@@ -1,120 +1,66 @@
-# Folioform Project Documentation
+# FolioLab Project Documentation
 
 ## Project Title
 
-Folioform: Portfolio Template Generator
+FolioLab: Online Portfolio Generator
 
 ## Project Description
 
-Folioform is a web application for creating and publishing personal portfolios. Users register and sign in, enter contact and biography details, add education, skills, projects, work experience, and social links, then choose a design and preview a shareable portfolio. Portfolio owners can edit or delete their portfolios from a private dashboard.
+FolioLab is a web application that lets users register, create, edit, and share personal portfolios. Users add contact information, a profile photo, biography, education, skills, projects, work experience, and social or website links. They select one of three designs (Simple, Modern, or Creative), preview the portfolio, and share its public link. Owners can manage their portfolios from a private dashboard.
 
 ## Technologies Used
 
-| Area | Technology |
-| --- | --- |
-| Backend framework | Laravel 13 |
-| Server language | PHP 8.4 |
-| Front end | Blade templates, HTML, custom CSS, and browser JavaScript |
-| Asset tooling | Vite |
-| Web server | Nginx |
-| PHP process manager | PHP-FPM, managed by Supervisor |
-| Containerization | Docker |
-| Source control | Git and GitHub |
+1. PHP 8.4
+2. Laravel 13
+3. Blade templates
+4. HTML, CSS, and JavaScript
+5. Vite for frontend asset tooling; Tailwind CSS is included in the asset setup, while the portfolio screens primarily use custom CSS.
+6. PostgreSQL for the production database; SQLite for local development and automated tests.
+7. Git and GitHub for source control.
+8. Docker, Nginx, PHP-FPM, and Supervisor for the production web container.
+9. Railway for hosting, deployment, and managed PostgreSQL.
 
 ## Database Platform
 
-The production database is PostgreSQL, provided by Railway and connected to the Laravel service using `DB_CONNECTION=pgsql` and `DB_URL`. Local development and automated tests use SQLite.
+PostgreSQL, hosted as a Railway Postgres service. The Laravel application connects using `DB_CONNECTION=pgsql` and `DB_URL`.
 
-## Hosting and Deployment
+## Hosting/Deployment Platform
 
-- Hosting platform: Railway
-- Source repository: [github.com/kyrielebron931/finals](https://github.com/kyrielebron931/finals)
-- Production app service: `finals`
-- Production database service: `Postgres`
-- Deployment method: Railway builds the repository's Dockerfile. The container runs Nginx and PHP-FPM; its startup script creates the public-storage link and runs database migrations.
-- Public URL: [https://folioform.up.railway.app](https://folioform.up.railway.app)
+Railway hosts the Laravel web application and PostgreSQL database. Railway builds the repository's Dockerfile. The container runs Nginx and PHP-FPM, creates Laravel's public-storage link, and runs database migrations during startup.
 
-The public URL returned HTTP 200 during the latest verification on October 14, 2026. Recheck the link when submitting this report because deployment status can change.
+GitHub repository: [github.com/kyrielebron931/finals](https://github.com/kyrielebron931/finals)
 
 ## Database Structure
 
-### `users`
+1. **`users`**: Registered accounts with an auto-incrementing numeric `id`, name, unique email, hashed password, optional email verification timestamp, remember token, and timestamps.
+2. **`portfolios`**: Portfolio owner (`user_id` foreign key), unique public `slug`, full name, profile-photo file path, email, contact number, address, biography, selected template, and timestamps. The portfolio primary key is an auto-incrementing numeric `id`, not a UUID.
+3. **Portfolio content fields**: `education`, `skills`, `projects`, `experience`, and `links` are JSON columns containing their respective entries.
+4. **`sessions`**: Session records used to maintain signed-in users.
+5. **Supporting tables**: `password_reset_tokens`, `cache`, `cache_locks`, `jobs`, `job_batches`, and `failed_jobs` are created by Laravel's migrations.
 
-Stores account and authentication data.
+Profile photos are stored as files on Laravel's public storage disk. The `portfolios.profile_picture` column stores the file path, not the image data. A Railway volume mounted at `/var/www/html/storage/app/public` keeps uploaded images across deploys and restarts.
 
-| Column | Purpose |
-| --- | --- |
-| `id` | Primary key |
-| `name` | Account holder's name |
-| `email` | Unique login email |
-| `email_verified_at` | Optional email-verification timestamp |
-| `password` | Hashed account password |
-| `remember_token` | Persistent login token |
-| `created_at`, `updated_at` | Record timestamps |
+## Screenshots of the System
 
-### `portfolios`
+Insert screenshots captured from the running website:
 
-Stores portfolio details. Each portfolio belongs to one user; deleting the owner cascades to their portfolios. The unique `slug` is used for the public share URL.
+- Home page
+- Registration and login pages
+- Portfolio dashboard/manage page
+- Portfolio information form
+- Template selection page
+- Portfolio preview and public portfolio page
 
-| Column | Type / purpose |
-| --- | --- |
-| `id` | Primary key |
-| `user_id` | Foreign key to `users.id`, cascade on delete |
-| `slug` | Unique public identifier |
-| `full_name` | Display name |
-| `profile_picture` | Nullable path to an uploaded image |
-| `email` | Public contact email |
-| `contact_number`, `address` | Optional contact details |
-| `about` | Optional biography text |
-| `education` | Nullable JSON array of education entries |
-| `skills` | Nullable JSON array of skills |
-| `projects` | Nullable JSON array of projects |
-| `experience` | Nullable JSON array of work entries |
-| `links` | Nullable JSON array of social or website links |
-| `template` | Selected design: `simple`, `modern`, or `creative`; defaults to `simple` |
-| `created_at`, `updated_at` | Record timestamps |
+## Screenshots of the 3 Templates
 
-### Laravel support tables
+Insert one generated-portfolio screenshot for each design:
 
-The migrations also create `password_reset_tokens` for password reset, `sessions` for database-backed sessions, `cache` and `cache_locks` for database cache, and `jobs`, `job_batches`, and `failed_jobs` for queue processing.
+1. Simple: clean, minimal, professional layout.
+2. Modern: structured layout with card-like sections and visual emphasis.
+3. Creative: dark editorial styling with expressive typography and accent colors.
 
-## Portfolio Templates
+## Published Website URL
 
-1. **Simple**: A clean, minimal layout focused on biography and work history.
-2. **Modern**: A structured, card-based layout with a prominent profile area and project sections.
-3. **Creative**: A dark editorial layout with expressive typography and accent colors.
+[https://foliolab.up.railway.app/](https://foliolab.up.railway.app/)
 
-All templates use the same saved portfolio data; selecting another template changes the presentation, not the content.
-
-## Main User Flow
-
-1. Open the home page and create an account or sign in.
-2. Create a portfolio and enter personal details, education, skills, projects, experience, and links.
-3. Save the information to PostgreSQL.
-4. Choose one of the three templates and preview the result.
-5. Share the public `/p/{slug}` URL.
-6. Return to the dashboard to edit or delete the portfolio.
-
-Portfolio management routes require authentication and verify ownership. Public portfolio pages are viewable by anyone with the share URL.
-
-## Screenshots for Submission
-
-Add actual screenshots from the running site for each item below. Do not include account passwords, database URLs, application keys, or other secrets in screenshots.
-
-| Suggested file name | Screen to capture |
-| --- | --- |
-| `home.png` | Home page with the create-portfolio button |
-| `register.png` | Registration form |
-| `login.png` | Login form |
-| `dashboard.png` | Portfolio management page |
-| `portfolio-form.png` | Information form with its sections |
-| `template-selection.png` | Page showing all three template choices |
-| `template-simple.png` | Generated portfolio using Simple |
-| `template-modern.png` | Generated portfolio using Modern |
-| `template-creative.png` | Generated portfolio using Creative |
-
-## Verification
-
-- Automated tests: `php artisan test` (6 tests pass).
-- Production container: Docker build succeeds; Nginx and PHP-FPM start, and the Laravel `/up` health endpoint returns HTTP 200 with Railway's target port configuration.
-- Live URL: verified at the time noted above.
+Public portfolios use the `/p/{slug}` path. Portfolio editing and deletion require the authenticated owner.
