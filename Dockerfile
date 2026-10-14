@@ -6,18 +6,17 @@ COPY . .
 RUN rm -f bootstrap/cache/packages.php bootstrap/cache/services.php \
     && composer dump-autoload --optimize --no-dev --no-scripts
 
-FROM php:8.4-apache
-RUN apt-get update && apt-get install -y --no-install-recommends libonig-dev libpq-dev \
-    && docker-php-ext-install mbstring pdo_pgsql \
-    && a2dismod mpm_event mpm_worker \
-    && a2enmod mpm_prefork rewrite \
+FROM php:8.4-fpm
+RUN apt-get update && apt-get install -y --no-install-recommends libonig-dev libpq-dev nginx supervisor \
     && rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-install -j"$(nproc)" mbstring pdo_pgsql
 WORKDIR /var/www/html
 COPY --from=vendor /app /var/www/html
-RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf \
-    && sed -ri '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf \
-    && chown -R www-data:www-data storage bootstrap/cache \
+COPY nginx.conf /etc/nginx/sites-available/default
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R ug+rwX storage bootstrap/cache
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
