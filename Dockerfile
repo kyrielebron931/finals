@@ -10,6 +10,7 @@ FROM php:8.4-fpm
 RUN apt-get update && apt-get install -y --no-install-recommends libonig-dev libpq-dev nginx supervisor \
     && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install -j"$(nproc)" mbstring pdo_pgsql
+RUN sed -i 's/^listen = 9000$/listen = 127.0.0.1:9001/' /usr/local/etc/php-fpm.d/docker.conf
 WORKDIR /var/www/html
 COPY --from=vendor /app /var/www/html
 COPY nginx.conf /etc/nginx/sites-available/default
