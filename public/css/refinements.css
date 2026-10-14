@@ -1,0 +1,8 @@
+.hero-copy h1{font-size:78px}
+.auth-aside h1{font-size:64px}
+.portfolio-sheet.layout-modern h1 em{color:var(--lime)}
+.portfolio-sheet.layout-creative h1{max-width:780px;font-size:72px}
+.portfolio-sheet.layout-creative h1 em{color:var(--lime);font-size:inherit}
+.portfolio-side img{filter:none}
+@media(max-width:850px){.hero-copy h1{font-size:68px}}
+@media(max-width:620px){.hero-copy h1{font-size:58px}.auth-aside h1{font-size:48px}.portfolio-sheet.layout-creative h1{font-size:50px}}
