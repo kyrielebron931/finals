@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="/css/portfolio.css">
-    <link rel="stylesheet" href="/css/refinements.css">
+    <link rel="stylesheet" href="/css/refinements.css?v={{ filemtime(public_path('css/refinements.css')) }}">
     @stack('head')
 </head>
 <body class="@yield('body-class')">

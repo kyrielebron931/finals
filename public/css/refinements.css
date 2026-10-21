@@ -4,7 +4,7 @@
 .portfolio-sheet.layout-creative h1{max-width:780px;font-size:72px}
 .portfolio-sheet.layout-creative h1 em{color:var(--lime);font-size:inherit}
 .portfolio-side img{filter:none}
-.site-nav a.is-active,.site-nav a.is-active:hover{padding:8px 10px;background:var(--ink);color:var(--white);outline:2px solid var(--ink);outline-offset:3px}
+.site-nav a.is-active,.site-nav a.is-active:hover{display:inline-flex;align-items:center;padding:8px 10px;border:2px solid var(--coral);background:var(--ink);color:var(--white)}
 .delete-confirmation{width:min(420px,calc(100vw - 32px));border:1px solid var(--line);padding:26px;background:var(--white);color:var(--ink);box-shadow:0 20px 80px #19221f33}
 .delete-confirmation::backdrop{background:#19221f88}
 .delete-confirmation h2{font:600 20px var(--display);margin:0 0 8px}

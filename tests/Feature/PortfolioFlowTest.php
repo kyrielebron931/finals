@@ -46,7 +46,8 @@ class PortfolioFlowTest extends TestCase
 
         $this->get(route('portfolios.index'))
             ->assertOk()
-            ->assertSee('aria-current="page"', false)
+            ->assertSee('class="is-active" aria-current="page"', false)
+            ->assertSee('/css/refinements.css?v=', false)
             ->assertSee('Keep portfolio')
             ->assertSee('Delete portfolio');
 
