@@ -71,7 +71,7 @@ class PortfolioController extends Controller
         $data = $request->validate(['template' => ['required', 'in:'.implode(',', self::TEMPLATES)]]);
         $portfolio->update($data);
 
-        return redirect()->route('portfolios.preview', $portfolio);
+        return redirect()->route('portfolios.preview', $portfolio)->with('status', 'Portfolio design updated.');
     }
 
     public function preview(Portfolio $portfolio): View

@@ -41,7 +41,14 @@ class PortfolioFlowTest extends TestCase
 
         $this->actingAs($user)
             ->put(route('portfolios.template', $portfolio), ['template' => 'creative'])
-            ->assertRedirect(route('portfolios.preview', $portfolio));
+            ->assertRedirect(route('portfolios.preview', $portfolio))
+            ->assertSessionHas('status', 'Portfolio design updated.');
+
+        $this->get(route('portfolios.index'))
+            ->assertOk()
+            ->assertSee('aria-current="page"', false)
+            ->assertSee('Keep portfolio')
+            ->assertSee('Delete portfolio');
 
         $this->get(route('portfolios.preview', $portfolio))->assertOk()->assertSee('Creative portfolio');
         $this->get(route('portfolios.public', $portfolio))->assertOk()->assertSee('Morgan Lee')->assertSee('Selected project');

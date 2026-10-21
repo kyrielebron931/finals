@@ -18,7 +18,7 @@
         <a class="wordmark" href="{{ route('home') }}" aria-label="Folioform home"><span class="wordmark-mark">f.</span>folioform</a>
         <nav class="site-nav" aria-label="Main navigation">
             @auth
-                <a href="{{ route('portfolios.index') }}">My portfolios</a>
+                <a href="{{ route('portfolios.index') }}" @if (request()->routeIs('portfolios.index')) class="is-active" aria-current="page" @endif>My portfolios</a>
                 <span class="nav-user">{{ auth()->user()->name }}</span>
                 <form action="{{ route('logout') }}" method="post">@csrf<button class="nav-link-button" type="submit">Sign out</button></form>
             @else
@@ -38,5 +38,37 @@
     <main>@yield('content')</main>
     <footer class="site-footer"><a class="wordmark" href="{{ route('home') }}"><span class="wordmark-mark">f.</span>folioform</a><span>Made for the next thing you do.</span><span>© {{ date('Y') }} Folioform</span></footer>
     @stack('scripts')
+    <script>
+        document.querySelectorAll('.flash-message').forEach((message) => {
+            window.setTimeout(() => message.remove(), 5000);
+        });
+
+        const deletionDialog = document.querySelector('#delete-portfolio-dialog');
+        let pendingDeleteForm;
+
+        if (deletionDialog) {
+            document.querySelectorAll('[data-confirm-delete]').forEach((form) => {
+                form.addEventListener('submit', (event) => {
+                    if (form.dataset.confirmed === 'true') {
+                        delete form.dataset.confirmed;
+                        return;
+                    }
+
+                    event.preventDefault();
+                    pendingDeleteForm = form;
+                    deletionDialog.showModal();
+                });
+            });
+
+            deletionDialog.addEventListener('close', () => {
+                if (deletionDialog.returnValue === 'confirm' && pendingDeleteForm) {
+                    pendingDeleteForm.dataset.confirmed = 'true';
+                    pendingDeleteForm.requestSubmit();
+                }
+
+                pendingDeleteForm = null;
+            });
+        }
+    </script>
 </body>
 </html>
