@@ -37,10 +37,17 @@
 @endsection
 @push('scripts')
 <script>
+const repeaterTemplates = new Map(
+    Array.from(document.querySelectorAll('[data-list]'), (list) => [
+        list.dataset.list,
+        list.firstElementChild.cloneNode(true),
+    ]),
+);
+
 document.querySelectorAll('[data-add]').forEach((button) => {
     button.addEventListener('click', () => {
         const list = document.querySelector(`[data-list="${button.dataset.add}"]`);
-        const item = list.firstElementChild.cloneNode(true);
+        const item = repeaterTemplates.get(button.dataset.add).cloneNode(true);
         const index = list.children.length;
         item.querySelectorAll('input, textarea').forEach((field) => {
             field.value = '';
